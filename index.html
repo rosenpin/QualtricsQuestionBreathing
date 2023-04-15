@@ -1,0 +1,71 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <img style="height: 250px;" id="img">
+    <br>
+    <h3 id="timer"></h3>
+    <script>
+        // Get the div element by id
+        var div = document.getElementById("timer");
+        var img = document.getElementById("img");
+
+        //var next = jQuery("#NextButton");
+        //next.hide();
+        setTimeout(() => {
+            next.show();
+            div.hide();
+            img.hide();
+        }, 2 * 60 * 1000);
+
+
+        // Set the initial values for the timer and action
+        var timer = 4;
+        var action = "לשאוף";
+
+        // Define a function to update the div text
+        function updateDiv() {
+            // Display the timer and action
+            div.innerHTML = action + " במשך " + timer + " שניות<br>";
+
+            // Check the current action and update accordingly
+            if (action == "לשאוף") {
+                // If breathing in, increment the timer by 1
+                timer--;
+                // If timer reaches 4, switch to holding breath
+                if (timer == 0) {
+                    action = "להחזיק את הנשימה";
+                    timer = 7;
+                }
+                img.src = "breath_in.jpg"
+            } else if (action == "להחזיק את הנשימה") {
+                // If holding breath, increment the timer by 1
+                timer--;
+                // If timer reaches 7, switch to exhaling
+                if (timer == 0) {
+                    action = "להוציא אוויר";
+                    timer = 8;
+                }
+                img.src = "hold_in.png"
+            } else if (action == "להוציא אוויר") {
+                // If exhaling, increment the timer by 1
+                timer--;
+                // If timer reaches 8, switch to breathing in
+                if (timer == 0) {
+                    action = "לשאוף";
+                    timer = 4;
+                }
+                img.src = "breath_out.png"
+            }
+        }
+
+        updateDiv();
+        // Set an interval to call the updateDiv function every second
+        setInterval(updateDiv, 1000);
+    </script>
+</body>
+
+</html>
