@@ -1,30 +1,67 @@
 <html>
 
 <head>
-
 </head>
 
 <body>
-    <div style="text-align: center">
-        <img style="height: 250px;" id="img">
+<style>
+    .circle {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50vh;
+      height: 50vh;
+      background-color: cyan;
+      border-radius: 50%;
+      opacity: 1;
+          z-index: -1;
+    }
+     @keyframes colorChange {
+      0%, 100% {
+        background-color: cyan;
+      }
+      50% {
+        background-color: aqua;
+      }
+    }
+     @keyframes colorChange2 {
+      0%, 100% {
+        background-color: cyan;
+      }
+      50% {
+        background-color: lightcyan;
+      }
+    }
+  
+</style>
+
+
+<div style="text-align: center">
+        <div class="circle" id="circle"></div>
+        <h2 id="timer"></h2>
+        <h1 id="finish" style="color:green">זהו אפשר להמשיך :)</h1>
+
+        <img style="height: 150px;" id="img">
         <br>
-        <h2 id="timer">
-            </h3>
-            <h1 id="finish">זהו</h1>
+        <h2 id="timer_total">זמן נותר 2:00</h2>
     </div>
     <script>
-        // Get the div element by id
+     
+  // Get the div element by id
         var div = document.getElementById("timer");
         var img = document.getElementById("img");
 
-        var next = document.getElementById("NextButton");
+        const circle = document.getElementById("circle");
+
         var finish = document.getElementById("finish");
-        //finish.hide();
-        if (next != null)
-            next.hide();
+        finish.style.display= "none";
+
         setTimeout(() => {
-            next.show();
+            var next = jQuery("#NextButton");
+            next.prop("disabled", false);
             div.hide();
+            cricle.hide();
             img.hide();
             finish.show();
         }, 2 * 60 * 1000);
@@ -32,40 +69,43 @@
 
         // Set the initial values for the timer and action
         var timer = 4;
-        var action = "לשאוף";
+        var action = "להכניס";
 
         // Define a function to update the div text
         function updateDiv() {
             // Display the timer and action
-            div.innerHTML = action + " במשך " + timer + " שניות<br>";
-
+            div.innerHTML = "<span style='font-weight: bold; font-size: 40px;'>"+action +"</span>"+ " אוויר במשך <span id='timer_time' style='font-weight: bold; font-size: 40px; '>" + timer + "</span> שניות<br>";
+            timee = document.getElementById("timer_time");
             // Check the current action and update accordingly
-            if (action == "לשאוף") {
+            if (action == "להכניס") {
                 // If breathing in, increment the timer by 1
                 timer--;
                 // If timer reaches 4, switch to holding breath
                 if (timer == 0) {
-                    action = "להחזיק את הנשימה";
+                    action = "להחזיק";
                     timer = 7;
                 }
+                timee.style.color = "DarkCyan"
                 img.src = "https://raw.githubusercontent.com/rosenpin/QualtricsQuestionBreathing/master/breath_in.png"
-            } else if (action == "להחזיק את הנשימה") {
+            } else if (action == "להחזיק") {
                 // If holding breath, increment the timer by 1
                 timer--;
                 // If timer reaches 7, switch to exhaling
                 if (timer == 0) {
-                    action = "להוציא אוויר";
+                    action = "להוציא";
                     timer = 8;
                 }
+                timee.style.color = "indigo"
                 img.src = "https://raw.githubusercontent.com/rosenpin/QualtricsQuestionBreathing/master/hold_in.png"
-            } else if (action == "להוציא אוויר") {
+            } else if (action == "להוציא") {
                 // If exhaling, increment the timer by 1
                 timer--;
                 // If timer reaches 8, switch to breathing in
                 if (timer == 0) {
-                    action = "לשאוף";
+                    action = "להכניס";
                     timer = 4;
                 }
+                timee.style.color = "IndianRed"
                 img.src = "https://raw.githubusercontent.com/rosenpin/QualtricsQuestionBreathing/master/breath_out.png"
             }
         }
@@ -73,6 +113,76 @@
         updateDiv();
         // Set an interval to call the updateDiv function every second
         setInterval(updateDiv, 1000);
+
+    function expandCircle() {
+      circle.style.transition = "width 4s, height 4s, transform 4s";
+      circle.style.transform = "translate(-50%, -50%)";// scale(2)";
+//	  circle.style.animation = "colorChange2 6s 1";
+		      circle.style.width = "100vh";
+      circle.style.height = "100vh";
+
+    }
+
+     function holdCircle() {
+      circle.style.transition = "none";
+//      circle.style.animation = "colorChange 3.5s 1";
+    }
+
+    function shrinkCircle() {
+//      circle.style.animation = "none";
+      circle.style.transition = "width 8s, height 8s, transform 8s";
+      circle.style.transform = "translate(-50%, -50%)";// scale(1)";    
+		      circle.style.width = "50vh";
+      circle.style.height = "50vh";
+
+    }
+
+    function animateCircle() {
+      expandCircle();
+      setTimeout(() => {
+        holdCircle();
+        setTimeout(() => {
+          shrinkCircle();
+            setTimeout(() => {
+              animateCircle();
+            }, 8000);
+        }, 7000);
+      }, 4000);
+    }
+
+    setTimeout(() => {
+      animateCircle();
+    }, 100);
+
+	// timer
+	var timer_div = document.getElementById("timer_total");
+	// Set the initial time in seconds
+var time = 119;
+	function updateTimer(){
+		  // Calculate the minutes and seconds from the time
+  var minutes = Math.floor(time / 60);
+  var seconds = time % 60;
+
+  // Pad the seconds with a zero if needed
+  var formattedSeconds = seconds < 10 ? "0" + seconds : seconds;
+
+  // Display the timer
+if (time % 10 == 0 || time == 0) {
+			  timer_div.textContent = "זמן נותר " + minutes + ":" + formattedSeconds;
+  }
+
+  // Decrease the time by one second
+  time--;
+
+  // Stop the timer when it reaches zero
+  if (time < 0) {
+    clearInterval(interval);
+    timer_div.textContent = "00:00";
+  }
+	}
+// Update the timer every second
+	updateTimer();
+var interval = setInterval(updateTimer, 1000);
     </script>
 </body>
 

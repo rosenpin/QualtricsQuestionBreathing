@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blue Circle Animation</title>
+  <style>
+    .circle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      width: 100px;
+      height: 100px;
+      background-color: blue;
+      border-radius: 50%;
+      opacity: 1;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(3.5);
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(3.6);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="circle" id="circle"></div>
+  <script>
+    const circle = document.getElementById("circle");
+
+    function expandCircle() {
+      circle.style.transition = "width 4s, height 4s, transform 4s";
+      circle.style.width = "300px";
+      circle.style.height = "300px";
+      circle.style.transform = "translate(-50%, -50%) scale(3.5)";
+    }
+
+     function holdCircle() {
+      circle.style.transition = "none";
+      //circle.style.animation = "pulse 2s infinite";
+    }
+
+    function shrinkCircle() {
+      circle.style.animation = "none";
+      circle.style.transition = "width 8s, height 8s, transform 8s";
+      circle.style.width = "100px";
+      circle.style.height = "100px";
+      circle.style.transform = "translate(-50%, -50%) scale(2)";    
+    }
+
+    function animateCircle() {
+      expandCircle();
+      setTimeout(() => {
+        holdCircle();
+        setTimeout(() => {
+          shrinkCircle();
+            setTimeout(() => {
+              animateCircle();
+            }, 8000);
+        }, 7000);
+      }, 4000);
+    }
+
+    setTimeout(() => {
+      animateCircle();
+    }, 100);
+  </script>
+</body>
+</html>
+
